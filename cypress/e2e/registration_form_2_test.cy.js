@@ -5,35 +5,73 @@ beforeEach(() => {
 /*
 Assignement 4: add content to the following tests
 */
+import { faker } from '@faker-js/faker'
+ const StaticEmail = 'rolands@Rolands.eu'
+ const RandomEmail = faker.internet.email()
+ const StaticFirstName = 'Rolands'
+ const RandomFirstName = faker.person.firstName()
+ const StaticLastName = 'Why not'
+ const RandomLastName = faker.person.lastName()
+ const StaticUsername = 'Power'
+ const FakeUsername = faker.internet.username
+ const StaticPhone = '26707456'
+ const RandomPhone = faker.phone.number()
+ let StaticPassword = 'Zuze12345'
+ let RandomPassword = faker.internet.password()
 
 describe('Section 1: Functional tests', () => {
 
     it('User can use only same both first and validation passwords', ()=>{
-        // Add test steps for filling in only mandatory fields
-        // Type confirmation password which is different from first password
-        // Assert that submit button is not enabled
-        // Assert that successful message is not visible
-        // Assert that error message is visible
-        // Change the test, so the passwords would match
-        // Add assertion, that error message is not visible anymore
-        // Add assertion, that submit button is now enabled
+        cy.get('#username').typev(FakeUsername)
+        cy.get('#email').type(RandomEmail)
+        cy.get('[data-cy="name"]').type(RandomFirstName)
+        cy.get('[data-testid="lastNameTestId"]').type(RandomLastName)
+        cy.get('[data-testid="phoneNumberTestId"]').type(RandomPhone)
+        cy.get("input[name='password']").type(StaticPassword)
+        cy.get('[name="confirm"]').type('Saknes123')
+        cy.get('h2').contains('Password').click()
+        cy.get('.submit_button').should('be.disabled')
+        cy.get('#success_message').should('not.be.visible')
+        cy.get('#password_error_message').should('be.visible').should('contain', 'Passwords do not match!')
+        cy.get('[name="confirm"]').scrollIntoView().clear().type(StaticPassword)
+        cy.get('h2').contains('Password').click()
+        cy.get('#password_error_message').should('not.be.visible')
+        cy.get('.submit_button').should('be.enabled')
     })
     
     it('User can submit form with all fields added', ()=>{
-        // Add test steps for filling in ALL fields
-        // Assert that submit button is enabled
-        // Assert that after submitting the form system show successful message
+        cy.get('#username').type(StaticUsername)
+        cy.get('#email').type(StaticEmail)
+        cy.get('[data-cy="name"]').type(StaticFirstName)
+        cy.get('[data-testid="lastNameTestId"]').type(StaticLastName)
+        cy.get('[data-testid="phoneNumberTestId"]').type(StaticPhone)
+        cy.get('#htmlFavLanguage').check()
+        cy.get('#vehicle1').check()
+        cy.get('select#cars').select('Audi')
+        cy.get('select#animal').select('Snake')
+        cy.get("input[name='password']").type(StaticPassword)
+        cy.get('[name="confirm"]').type(StaticPassword)
+        cy.get('h2').contains('Password').click()
+        cy.get('.submit_button').should('be.enabled')
+        cy.get('.submit_button'). click()
+        cy.get('#success_message').should('be.visible')
     })
 
     it('User can submit form with valid data and only mandatory fields added', ()=>{
-        // Add test steps for filling in ONLY mandatory fields
-        // Assert that submit button is enabled
-        // Assert that after submitting the form system shows successful message
+        cy.get('#username').type(StaticUsername)
+        cy.get('#email').type(StaticEmail)
+        cy.get('[data-cy="name"]').type(StaticFirstName)
+        cy.get('[data-testid="lastNameTestId"]').type(StaticLastName)
+        cy.get('[data-testid="phoneNumberTestId"]').type(StaticPhone)
+        cy.get("input[name='password']").type(StaticPassword)
+        cy.get('[name="confirm"]').type(StaticPassword)
+        cy.get('h2').contains('Password').click()
+        cy.get('.submit_button').should('be.enabled')
+        cy.get('.submit_button'). click()
+        cy.get('#success_message').should('be.visible')
+    }
 
-        // example, how to use function, which fills in all mandatory data
-        // in order to see the content of the function, scroll to the end of the file
-        inputValidData('johnDoe')
-    })
+        )
 
     // Add at least 1 test for checking some mandatory field's absence
 
